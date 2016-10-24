@@ -8,8 +8,12 @@
 #include <string.h>
 
 /* For mkdir */
+#ifdef WIN32
+#include <direct.h>
+#else
 #include <sys/stat.h>
 #include <sys/types.h>
+#endif
 
 #include "image.h"
 #include "matrix.h"
@@ -149,7 +153,11 @@ void WritePMVS(const char *output_path,
     int num_cameras = (int) cameras.size();
 
     /* Make sure output_path exists */
+#ifdef WIN32
+	_mkdir(output_path);
+#else
     mkdir(output_path, 0770);
+#endif // WIN32
 
     char buf[2048];
     sprintf(buf, "%s/prep_pmvs.sh", output_path);
