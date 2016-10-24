@@ -1,0 +1,207 @@
+# Bundler exe
+
+# Bundler
+if (NOT (5point AND ann_1.1_char AND cblas AND clapack
+	AND cminpack AND f2c AND getopt	AND imagelib
+	AND jpeg AND matrix	AND sba-1.5	AND sfm-driver))
+	message(WARNING "Can not make Bundler without proper dependencies!")
+  	update_cache_variable(BUNDLERAPP OFF)
+endif (NOT (5point AND ann_1.1_char AND cblas AND clapack
+	AND cminpack AND f2c AND getopt	AND imagelib
+	AND jpeg AND matrix	AND sba-1.5	AND sfm-driver))
+
+if(BUNDLERAPP)
+	set(BUNDLER_APP_SRCS
+		${BUNDLER_SRC_PATH}/BaseApp.cpp
+		${BUNDLER_SRC_PATH}/BaseGeometry.cpp
+		${BUNDLER_SRC_PATH}/BoundingBox.cpp
+		${BUNDLER_SRC_PATH}/BruteForceSearch.cpp
+		${BUNDLER_SRC_PATH}/Bundle.cpp
+		${BUNDLER_SRC_PATH}/BundleAdd.cpp
+		${BUNDLER_SRC_PATH}/BundleFast.cpp
+		${BUNDLER_SRC_PATH}/BundleIO.cpp
+		${BUNDLER_SRC_PATH}/BundlerApp.cpp
+		${BUNDLER_SRC_PATH}/BundlerGeometry.cpp
+		${BUNDLER_SRC_PATH}/BundleTwo.cpp
+		${BUNDLER_SRC_PATH}/BundleUtil.cpp
+		${BUNDLER_SRC_PATH}/Camera.cpp
+		${BUNDLER_SRC_PATH}/ComputeTracks.cpp
+		${BUNDLER_SRC_PATH}/Decompose.cpp
+		${BUNDLER_SRC_PATH}/Distortion.cpp
+		${BUNDLER_SRC_PATH}/Epipolar.cpp
+		${BUNDLER_SRC_PATH}/Geometry.cpp
+		${BUNDLER_SRC_PATH}/ImageData.cpp
+		${BUNDLER_SRC_PATH}/keys.cpp
+		${BUNDLER_SRC_PATH}/LoadJPEG.cpp
+		${BUNDLER_SRC_PATH}/MatchTracks.cpp
+		${BUNDLER_SRC_PATH}/ProcessBundle.cpp
+		${BUNDLER_SRC_PATH}/Register.cpp
+		${BUNDLER_SRC_PATH}/RelativePose.cpp
+		${BUNDLER_SRC_PATH}/TwoFrameModel.cpp
+		${BUNDLER_SRC_PATH}/BaseApp.h
+		${BUNDLER_SRC_PATH}/BoundingBox.h
+		${BUNDLER_SRC_PATH}/BruteForceSearch.h
+		${BUNDLER_SRC_PATH}/Bundle.h
+		${BUNDLER_SRC_PATH}/BundleAdd.h
+		${BUNDLER_SRC_PATH}/BundlerApp.h
+		${BUNDLER_SRC_PATH}/BundleUtil.h
+		${BUNDLER_SRC_PATH}/Camera.h
+		${BUNDLER_SRC_PATH}/Decompose.h
+		${BUNDLER_SRC_PATH}/Distortion.h
+		${BUNDLER_SRC_PATH}/Epipolar.h
+		${BUNDLER_SRC_PATH}/Geometry.h
+		${BUNDLER_SRC_PATH}/ImageData.h
+		${BUNDLER_SRC_PATH}/keys.h
+		${BUNDLER_SRC_PATH}/keys2a.h
+		${BUNDLER_SRC_PATH}/LinkDirection.h
+		${BUNDLER_SRC_PATH}/LoadJPEG.h
+		${BUNDLER_SRC_PATH}/ParameterBound.h
+		${BUNDLER_SRC_PATH}/Register.h
+		${BUNDLER_SRC_PATH}/TwoFrameModel.h)
+	
+	add_executable (Bundler
+		${BUNDLER_APP_SRCS})
+
+	set_target_properties(Bundler 
+		PROPERTIES 
+		COMPILE_DEFINITIONS "__BUNDLER__;__BUNDLER_DISTR__")
+	
+	target_include_directories(Bundler 
+		PUBLIC ${BUNDLER_INCLUDE_PATH}
+		${BUNDLER_LIB_PATH}/matrix
+		${BUNDLER_LIB_PATH}/imagelib
+		${BUNDLER_LIB_PATH}/sfm-driver
+		${BUNDLER_LIB_PATH}/zlib/include
+		${BUNDLER_LIB_PATH}/ann_1.1_char/include
+		${BUNDLER_LIB_PATH}/jpeg/src
+		${BUNDLER_LIB_PATH}/getopt
+		${BUNDLER_LIB_PATH}/5point)
+
+	set_target_properties(Bundler 
+		PROPERTIES 
+		LINK_FLAGS "/LIBPATH:${BUNDLER_LIB_PATH}/zlib/lib")
+
+	target_link_libraries(Bundler 
+		5point
+		ann_1.1_char
+		cblas
+		clapack
+		cminpack
+		f2c
+		getopt
+		imagelib
+		jpeg
+		matrix
+		sba-1.5
+		sfm-driver
+		zlib.lib)
+endif(BUNDLERAPP)
+
+# Bundle2PMVS
+if (NOT (cblas AND clapack AND cminpack AND f2c
+	AND imagelib AND jpeg AND matrix))
+	message(WARNING "Can not make Bundle2PMVS without proper dependencies!")
+ 	update_cache_variable(BUNDLE2PMVS OFF)
+endif (NOT (cblas AND clapack AND cminpack AND f2c
+	AND imagelib AND jpeg AND matrix))
+
+if(BUNDLE2PMVS)
+	set(BUNDLE2PMVS_SRCS
+		${BUNDLER_SRC_PATH}/LoadJPEG.h
+		${BUNDLER_SRC_PATH}/Bundle2PMVS.cpp
+		${BUNDLER_SRC_PATH}/LoadJPEG.cpp)
+
+	add_executable (Bundle2PMVS
+		${BUNDLE2PMVS_SRCS})
+	
+	target_include_directories(Bundle2PMVS 
+		PUBLIC ${BUNDLER_INCLUDE_PATH}
+		${BUNDLER_LIB_PATH}/matrix
+		${BUNDLER_LIB_PATH}/imagelib
+		${BUNDLER_LIB_PATH}/jpeg/src
+		${BUNDLER_LIB_PATH}/sfm-driver)
+
+	target_link_libraries(Bundle2PMVS 
+		cblas
+		clapack
+		cminpack
+		f2c
+		imagelib
+		jpeg
+		matrix)
+endif(BUNDLE2PMVS)
+
+# RadialUndistort
+if (NOT (cblas AND clapack AND cminpack AND f2c
+	AND imagelib AND jpeg AND matrix))
+	message(WARNING "Can not make RadialUndistort without proper dependencies!")
+	update_cache_variable(RADIALUNDISTORT OFF)
+endif (NOT (cblas AND clapack AND cminpack AND f2c
+	AND imagelib AND jpeg AND matrix))
+
+if(RADIALUNDISTORT)
+	set(RADIALUNDISTORT_SRCS
+		${BUNDLER_SRC_PATH}/LoadJPEG.cpp
+		${BUNDLER_SRC_PATH}/RadialUndistort.cpp)
+
+	add_executable (RadialUndistort
+		${RADIALUNDISTORT_SRCS})
+	
+	target_include_directories(RadialUndistort 
+		PUBLIC ${BUNDLER_INCLUDE_PATH}
+		${BUNDLER_LIB_PATH}/matrix
+		${BUNDLER_LIB_PATH}/imagelib
+		${BUNDLER_LIB_PATH}/jpeg/src
+		${BUNDLER_LIB_PATH}/sfm-driver)
+
+	target_link_libraries(RadialUndistort 
+		cblas
+		clapack
+		cminpack
+		f2c
+		imagelib
+		jpeg
+		matrix)
+endif(RADIALUNDISTORT)
+
+# KeyMatchFull
+if (NOT ann_1.1_char)
+	message(WARNING "Can not make KeyMatchFull without proper dependencies!")
+	update_cache_variable(KeyMatchFull OFF)
+endif (NOT ann_1.1_char)
+
+if(KEYMATCHFULL)
+	set(KEYMATCHFULL_SRCS
+		${BUNDLER_SRC_PATH}/KeyMatchFull.cpp
+		${BUNDLER_SRC_PATH}/keys2a.cpp)
+
+	add_executable (KeyMatchFull
+		${KEYMATCHFULL_SRCS})
+	
+	target_include_directories(KeyMatchFull 
+		PUBLIC
+		${BUNDLER_LIB_PATH}/ann_1.1_char/include
+		${BUNDLER_LIB_PATH}/zlib/include)
+
+	set_target_properties(KeyMatchFull 
+		PROPERTIES 
+		LINK_FLAGS "/LIBPATH:${BUNDLER_LIB_PATH}/zlib/lib")
+
+	target_link_libraries(KeyMatchFull
+		ann_1.1_char
+		zlib)
+endif(KEYMATCHFULL)
+
+# Bundle2Vis
+if(BUNDLE2VIS)
+	set(BUNDLE2VIS_SRCS
+		${BUNDLER_SRC_PATH}/Bundle2Vis.cpp)
+
+	add_executable (Bundle2Vis
+		${BUNDLE2VIS_SRCS})
+	
+	target_include_directories(Bundle2Vis
+		PUBLIC ${BUNDLER_INCLUDE_PATH}
+		${BUNDLER_LIB_PATH}/matrix
+		${BUNDLER_LIB_PATH}/sfm-driver)
+endif(BUNDLE2VIS)
