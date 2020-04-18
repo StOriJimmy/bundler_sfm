@@ -28,6 +28,7 @@ extern "C" {
 
 #ifdef WIN32
 #include "types.h"
+#include "stdint.h"
 #endif
 
 /* 2D vector of ints */
